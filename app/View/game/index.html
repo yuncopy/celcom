@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+{{ include('banner.html') }}
+<div class="main">
+    <h2 class="title">Editor Choice</h2>
+    <ul class="mainlist clearfix">
+        {% for row in list.data %}
+        <li>
+            <div>
+                <p class="icon"><a href="/detail/{{ row.id|e }}.html">
+                 <img src="{{ row.iconurl }}" alt="{{ row.title|e }}" title="{{ row.title|e }}"/></a></p>
+                <p class="t_link"><a href="/detail/{{ row.id|e }}.html">{{ row.title|e }}</a></p>
+                <p class="t_link"><a class="sizes">{{ row.click|e }}次</a></p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <div class='pagebox' id='_function_code_page'>
+        <span class='pagebox_pre'><a href='{{ list.prev_page_url }}'>Prev</a></span>
+        <span class='pagebox_next'><a href='{{ list.next_page_url }}'>Next</a></span>
+    </div>     
+    <h2 class="title"><a href="/categorys.html">Game Category</a></h2>
+    <ul class="category clearfix">
+        {% for cate in cates %}
+            <li><a href="/categorys/{{ cate.id|e }}.html">{{ cate.name|e }}</a></li>
+        {% endfor %}
+    </ul>
+</div><!--main end-->
+
+{% endblock %}

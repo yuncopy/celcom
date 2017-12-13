@@ -1,0 +1,7 @@
+/vendor/*
+/storage/*
+/config/database.php
+/composer.lock
+/composer
+nbproject/*
+/public/ckfinder/config.php

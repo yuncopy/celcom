@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% block head %} 
+<!--视频播放器ckplayer  http://www.sucaihuo.com/jquery/16/1663/demo/-->
+<script type="text/javascript" src="/assets/package/ckplayer/ckplayer/ckplayer.js"></script>
+<script type="text/javascript" src="/assets/package/ckplayer/js/offlights.js"></script>
+{% endblock %}
+{% block content %}
+<!---start-content---->
+<div class="main-content">
+    <div class="wrap">
+        <div class="left-sidebar">
+            <div class="sidebar-boxs">
+                <div class="sidebar-box">
+                    <h2>Album-Name</h2>
+                    <a href="#"><img src="/assets/images/allbum.jpg" title="image-name" /></a>
+                    <h3>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT.</h3>
+                    <div class="rate">
+                        <b style="width:100%"> </b> 
+                        <a href="#">Rate 1/5</a>
+                        <a href="#">Rate 2/5</a>
+                        <a href="#">Rate 3/5</a>
+                        <a href="#">Rate 4/5</a>
+                        <a href="#">Rate 5/5</a>
+                        <div class="clear"> </div>
+                    </div>
+                    <input type="button" value="Rate it" />
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, ut labore et dolore magna aliqua.</p>
+                </div>
+                <div class="clear"> </div>
+                <div class="type-videos">
+                    <h3>TOP 10 视频</h3>
+                    <ul>
+                       {% for trow in top %}
+                        <li><a href="/singlepage/{{ trow.id|e }}.html">{{ trow.title}}</a></li>
+                       {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-content">
+            <div class="right-content-heading">
+                <div class="right-content-heading-left">
+                    <h3>Latest Collections of videos</h3>
+                </div>
+                <div class="right-content-heading-right">
+                    <div class="top-nav" style="font-size: 12px;">
+                        <ul>
+                            <li><a href="/sorts/1.html">最新</a></li>
+                            <li><a href="/sorts/2.html">热门</a></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                <div class="clear"> </div>
+            </div>
+            <div class="content-grids">
+                {% for row in list.data %}
+                <div class="content-grid {% if row.i%4 == 0 %} last-grid {% endif %}">
+                    <a href="/singlepage/{{ row.id|e }}.html"><img src="{{ row.thumb|e }}" title="{{ row.title|e }}" /></a>
+                    <a class="button" href="/singlepage/{{ row.id|e }}.html">Watch now</a>
+                </div>
+                {% endfor %}
+                
+                <div class="clear"> </div>
+                <!---start-pagenation----->
+                <div class="pagenation">
+                    <ul>
+                        <li><a href="{{ list.prev_page_url }}">上一页</a></li>
+                        <li><a href="{{ list.next_page_url }}">下一页</a></li>
+                    </ul>
+                </div>
+                <div class="clear"> </div>
+                <!---End-pagenation----->
+            </div>
+        </div>
+        <div class="clear"> </div>
+    </div>
+</div>
+<div class="clear"> </div>
+<!---End-content---->
+{% endblock %}  

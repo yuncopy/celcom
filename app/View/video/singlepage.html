@@ -1,0 +1,172 @@
+
+{% extends "layout.html" %}
+{% block css %}
+<style>
+    /* 一般浏览器不会出现下载按钮，只有谷歌浏览器会（低版本的右下角没有下载按钮，比如53.0版本) 。
+    如果你的谷歌浏览器版本是54.0-57.0之间，并且也出现了视频右下角有按钮的情况都可以使用下面的代码。
+    解决方法：*/
+    video::-internal-media-controls-download-button {
+        display:none;
+    }
+    video::-webkit-media-controls-enclosure {
+        overflow:hidden;
+    }
+    video::-webkit-media-controls-panel {
+        width: calc(100% + 30px); 
+    }
+    #a1{
+        height:320px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!---start-content---->
+<div class="main-content">
+    <div class="wrap">
+        <div class="left-sidebar">
+            <div class="sidebar-boxs">
+                <div class="clear"> </div>
+                <div class="type-videos">
+                    <h3>热门视频</h3>
+                    <ul>
+                        {% for trow in top %}
+                        <li><a href="/singlepage/{{ trow.id|e }}.html">{{ trow.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-content">
+            <div class="right-content-heading">
+                <div class="right-content-heading-left">
+                    <h3>欢迎观看视频</h3>
+                </div>
+                <div class="clear"> </div>
+            </div>
+            <div class="inner-page">
+                <div class="title">
+                    <ul>
+                        <li><h4>By:</h4></li>
+                        <li><a href="#">Author</a></li>
+                        <li><a href="#"><img src="/assets/images/sub.png" title="subscribe">subscribe</a></li>
+                    </ul>
+                </div>
+                <div class="video-inner">
+                    <div id="a1"></div>
+                </div>
+                <div class="clear"> </div>
+                <div class="video-details">
+                    <ul>
+                        <li><p>Uploaded on <a href="#">June 21, 2013</a> by <a href="#">Lorem</a></p></li>
+                        <li><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></li>
+                    </ul>
+                </div>
+                <div class="clear"> </div>
+                <div class="tags">
+                    <ul>
+                        <li><h3>Tags:</h3></li>
+                        <li><a href="#">Games</a> ,</li>
+                        <li><a href="#">HD-Videos</a></li>
+                    </ul>
+                </div>
+                <div class="clear"> </div>
+                <div class="share-artical">
+                    <h3> Also share on</h3>
+                    <ul>
+                        <li><a href="#"><img src="/assets/images/facebook.png" title="facebook">Facebook</a></li>
+                        <li><a href="#"><img src="/assets/images/twiter.png" title="Twitter">Twiiter</a></li>
+                        <li><a href="#"><img src="/assets/images/in.png" title="linked-in">Linked-in</a></li>
+                        <li><a href="#"><img src="/assets/images/google+.png" title="google+">Google+</a></li>
+                        <li><a href="#"><img src="/assets/images/pintrest.png" title="pintrest">Pintrest</a></li>
+                        <li><a href="#"><img src="/assets/images/rss.png" title="rss">Rss</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clear"> </div>
+    </div>
+</div>
+<div class="clear"> </div>
+
+<!---End-content---->
+<!--订阅界面-->
+{% include 'subscribe.html' %}
+{% endblock %}
+
+{% block js %}
+<!--视频播放器ckplayer  http://www.sucaihuo.com/jquery/16/1663/demo/-->
+<script type="text/javascript" src="/assets/package/ckplayer/ckplayer/ckplayer.js"></script>
+<script type="text/javascript" src="/assets/package/ckplayer/js/offlights.js"></script>
+<script type="text/javascript">
+    //如果你不需要某项设置，可以直接删除，注意var flashvars的最后一个值后面不能有逗号
+    function loadedHandler() {
+        if (CKobject.getObjectById('ckplayer_a1').getType()) {//说明使用html5播放器
+            console.log('播放器已加载，调用的是HTML5播放模块');
+            CKobject.getObjectById('ckplayer_a1').addListener('time', timeHandler);  // 监听播放时间
+        } else {
+            console.log('播放器已加载，调用的是Flash播放模块');
+            console.getObjectById('ckplayer_a1').addListener('time', 'timeHandler'); // 监听播放时间
+        }
+    }
+
+    //执行监听时间回调方法
+    var isNumber = true;//定义只判断一次
+    function timeHandler(t) {
+        var vip = "{{ vip }}";
+        if(!vip){  // 检测是否为VIP（已订阅）用户
+            if (t > 2 && isNumber) {
+                CKobject.getObjectById('ckplayer_a1').videoPause();//暂停播放
+                CKobject.getObjectById('ckplayer_a1').removeListener('time', 'timeHandler');
+                isNumber = false;
+                console.log('这里的弹出提示代码可以改成执行其它动作的代码');
+                //这时是判断当播放时间大于10，并且没有执行过试看判断的情况下进行判断。
+                CKobject.getObjectById('ckplayer_a1').videoClear();
+                //这里可以弹出登陆层或弹幕提示层
+                $('#subModal').modal({backdrop: 'static', keyboard: false});
+            }
+        }
+    }
+    var thumb = "{{ row.thumb }}";
+    var seeds = "{{ row.seeds }}";
+    var flashvars = {
+        p: 0,
+        e: 1,
+        i: thumb
+    };
+    var video = [seeds + '->video/mp4'];
+    var support = ['all'];
+    CKobject.embedHTML5('a1', 'ckplayer_a1', 810, 400, video, flashvars, support);
+    
+    //====禁止右键===开始===
+    $(document).ready(function () {
+        $(document).on('bind', '#ckplayer_a1', function () {
+            $(this).bind('contextmenu', function () {
+                return false;
+            });
+            $(this).attr('crossorigin', 'anonymous');
+        });
+    });
+    if (window.Event)
+        document.captureEvents(Event.MOUSEUP);
+    function nocontextmenu() {
+        event.cancelBubble = true
+        event.returnValue = false;
+        return false;
+    }
+    function norightclick(e) {
+        if (window.Event) {
+            if (e.which == 2 || e.which == 3)
+                return false;
+        } else if (event.button == 2 || event.button == 3) {
+            event.cancelBubble = true
+            event.returnValue = false;
+            return false;
+        }
+    }
+    document.oncontextmenu = nocontextmenu; // for IE5+
+    document.onmousedown = norightclick;   // for all others
+    
+    //====禁止右键==结束====
+</script>
+{% endblock %}
+

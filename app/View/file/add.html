@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="span9">
+    <div class="row-fluid">
+        <div class="page-header">
+            <h1>{% if detail.id|length > 0 %} 编辑 {% else %} 添加 {% endif %}<small> 游戏管理</small></h1>
+        </div>
+        <form class="form-horizontal" onsubmit="return false;" id="contenform">
+            <input type="hidden" class="input-xlarge" name="id" id="id" value="{{ detail.id }}" />
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="title">名称</label>
+                    <div class="controls">
+                        <input type="text" data-toggle="tooltip" data-placement="right" title="必须填写游戏名称" class="input-xlarge" id="title" value="{{ detail.title }}" name="title" placeholder="名称" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="version">版本</label>
+                    <div class="controls">
+                        <input type="text"  class="input-xlarge"  data-toggle="tooltip" data-placement="right" title="必须严格按照填写格式" value="{{ detail.version }}" id="name" name="version"  placeholder="v1.0.1" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="cate_id">类型</label>
+                    <div class="controls">
+                        <select id="cate_id" name="cate_id" class="{{ detail.cate_id }}">
+                            {% for row in cate %}
+                            <option value="{{ row.id|e }}">{{ row.name|e }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="iconurl">图标</label>
+                    <div class="controls">
+                        <input type="text" data-toggle="tooltip" value="{{url}}{{detail.iconurl}}" data-placement="right" title="必须选择图标" class="input-xlarge" size="48" name="iconurl" id="iconurl" /><button class="btn btn-default" onclick="openPopup('iconurl')">Select file</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="role">场景</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" value="{{url}}{{detail.scenes}}" size="48" data-toggle="tooltip" data-placement="right" title="必须选择场景" name="scenes" id="scenes" /><button class="btn btn-default" onclick="openPopup('scenes')">Select file</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="role">安装包</label>
+                    <div class="controls">
+                        <input type="text" value="{{url}}{{detail.seeds}}" class="input-xlarge" data-toggle="tooltip" data-placement="right" title="必须选择APK" size="48" name="seeds" id="seeds" /><button class="btn btn-default" onclick="openPopup('seeds')">Select file</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="city">更新</label>
+                    <div class="controls">
+                        <textarea class="form-control" data-toggle="tooltip" data-placement="right" title="游戏更新说明" rows="5"  name="descs" style="width:81%">{{ detail.descs }}</textarea>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="city">介绍</label>
+                    <div class="controls">
+                        <input name="texts" type="hidden" value="{{ detail.texts }}" id="texts">
+                        <div id="editor"></div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <input type="button" id="Changes" class="btn btn-success btn-large" value="Save Changes" /> 
+                    <input class="btn" type="reset" value="Cancel" />
+                </div>					
+            </fieldset>
+        </form>
+        
+        
+    </div>
+</div>
+
+<script src="/ckfinder/ckfinder.js"></script>
+
+<script src="/assets/package/ckeditor/ckeditor.js"></script>
+<script src="/assets/js/wap-ckeditor.js"></script>
+
+{% if detail.id|length > 0 %}
+<script>
+    // 编辑使用
+    var editor = CKEDITOR.replace("editor");
+    var content = $('#texts').val();  // 临时容器
+    editor.setData(content);  // 设置值
+    var cate_id = $('#cate_id').attr('class');
+    $('#cate_id > option').each(function(){
+        var val = $(this).val();
+        if(cate_id == val){
+            $(this).attr('selected','selected');
+        }
+    });
+</script>
+{% else %}
+<script>
+    // 添加使用
+    // 初始化编辑器
+    initSample();
+    // 选择文件
+    function openPopup(input_id) {
+        CKFinder.popup({
+            chooseFiles: true,
+            width: 800,
+            height: 600,
+            onInit: function (finder) {
+                finder.on('files:choose', function (evt) {
+                    var files = evt.data.files;
+                    var chosenFiles = '';
+                    // 查看手册 https://docs-old.ckeditor.com/ckfinder3/#!/api/CKFinder.Application
+                    files.forEach(function (file, i) {
+                        chosenFiles += file.getUrl() + ',';
+                    });
+                    chosenFiles = chosenFiles.substring(0, chosenFiles.length - 1); //jquery 删除字符串最后一个字符的方法
+                    document.getElementById(input_id).value = chosenFiles;
+                });
+                finder.on('file:choose:resizedImage', function (evt) {
+                    document.getElementById(input_id).value = evt.data.resizedUrl;
+                });
+            }
+        });
+    }
+</script>
+{% endif %}
+<script>
+    $(function () {
+         // 保存文件
+        $(document).on('click', '#Changes', function () {
+            var text = CKEDITOR.instances.editor.getData();
+            $('#texts').val(text);  // 设置容器值
+            var config = $('#contenform').serialize();
+            $.post("/file/addgame.html", config, function (e) {
+                if(e.status == 400){
+                    $("input[name='"+e.name+"']").attr('data-original-title',e.message).focus();
+                }else if(e.status == 200){
+                    myModal(e.message,3,function(){
+                        window.location.reload();
+                    });
+                }else{
+                    myModal(e.message,3);
+                }
+            }, 'json');
+        });
+        // 提示
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock %}

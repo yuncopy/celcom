@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="/assets/css/jquery.skippr.css">
+<style>
+    .detail_screen{
+        padding: 0 0 5px 2%;
+    }
+    #theTarget{
+        min-height: 200px;
+        min-height: 320px;
+        width: 100%;
+        padding: 0 20px;
+    }
+</style>
+<ul id="navlist" class="clearfix">
+    <li class="selected"><a href="/detail/2.html" class="border_r">Game introduced</a></li>
+    <li><a href="#" class="border_l">Game reviews</a></li>
+</ul><!--navlist end-->
+<div class="detail_info clearfix">
+    <div class="mypos">
+        <a href="/">Home</a> &gt; <a href="category/18/default.htm">{{ game.cate }}</a> &gt; {{ game.title }}
+    </div>
+    <h1>{{ game.title }}</h1>
+    <a href="/detail/2.html" class="detail_icon"><img src="{{ game.iconurl }}" width="65" height="65"/></a>
+    <ul class="clearfix">
+        <li><em>Version：{{ game.version }}</em></li>
+        <li><em>Type：</em><a href="/category/18.html">{{ game.cate }}</a></li>
+        <li><em>Size：{{ game.size }} M</em></li>
+        <li><em>Download：{{ game.click }} Times</em></li>
+        <li><em>Language：</em></li>
+        <li><em>Time：{{ game.time }}</em></li>
+    </ul>
+    <div class="detail_btn">
+        {% if subVip|length > 0 %}
+        <a class="fast_btn" href="/download/1.html" id="dl-btn" >Ordinary Download</a>
+        <a class="fast_btn" href="/download/2.html">High-speed Download</a>
+        {% else %} 
+        <a class="fast_btn"  data-toggle="modal" data-target="#subModal" id="dl-btn" >Ordinary Download</a>
+        <a class="fast_btn"  data-toggle="modal" data-target="#subModal" >High-speed Download</a>
+        {% endif %}
+    </div>
+</div><!--detail_info end-->
+<p class="client"></p>
+<div class="detail_screen">
+   
+    <div id="theTarget">
+        {% for row in scenes %}
+        <div style="background-image: url('{{ row }}')"></div>
+        {% endfor %}
+    </div>    
+</div>
+
+<div class="main">
+    <h2 class="title">Game introduction</h2>
+    <p class="text" id="intro_h"  data-texts="{{ game.texts }}">
+        
+    </p>
+    <div class="arr_oper arr_down"></div>
+    <h2 class="title">Update content</h2>
+    <p class="text" id="update_h" data-descs="{{ game.descs }}"></p>
+    <h2 class="title">Related games</h2>
+    <ul class="mainlist clearfix">
+        
+        <li>
+            <div>
+                <p class="icon"><a href="/detail/2.html"><img src="http://img01.muzhiwan.com//2013/05/14/5191999aebad3.png" alt="拇指玩安卓游戏-同类安卓游戏 战地防御2 完整版&nbsp; v1.2.4 下载" title="拇指玩安卓游戏 战地防御2 完整版&nbsp; v1.2.4" /></a></p>
+                <p class="t_link"><a href="/detail/3.html">战地防御2 完整版</a></p>
+                <p class="t_link"><a class="sizes">1703次</a></p>
+            </div>
+        </li>
+       
+    </ul>
+</div><!-- main end -->
+
+<script src="/assets/js/jquery.skippr.js"></script>
+<script>
+    $("#theTarget").skippr({
+
+        transition: 'slide',
+        speed: 1000,
+        easing: 'easeOutQuart',
+        navType: 'block',
+        childrenElementType: 'div',
+        arrows: true,
+        autoPlay: true,
+        autoPlayDuration: 5000,
+        keyboardOnAlways: true,
+        hidePrevious: false
+
+    });
+    
+    $(function($) {
+       
+        $('#intro_h').html(function(){
+           return  $(this).attr('data-texts');
+        });
+       
+        $('#update_h').html(function(){
+           return  $(this).attr('data-descs');
+        });
+       
+    });
+</script>
+
+{% endblock %}

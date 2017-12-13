@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<ul class="gamelist">
+
+    {% for row in list.data %}
+    <li  class="border_none">
+        <a href="/detail/{{ row.id|e }}.html" class="clearfix">
+            <div class="width1"><img src="{{ row.iconurl }}" alt="{{ row.title|e }}" title="{{ row.title|e }}" width="58" height="58"/></div>
+            <div class="width2">
+                <h2>{{ row.title|e }}</h2>
+                <p class="font_s color1">329.75MB | {{ row.click|e }}次</p>
+            </div>
+        </a>
+    </li>
+    {% endfor %}
+    
+</ul><!--gamelist end-->
+<div class='pagebox' id='_function_code_page'>
+    <br/>
+    <span class='pagebox_pre'><a href='{{ list.prev_page_url }}'>Prev</a></span>
+    <span class='pagebox_next'><a href='{{ list.next_page_url }}'>Next</a></span>
+</div>
+{% endblock %}

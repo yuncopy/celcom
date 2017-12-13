@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<ul id="navlist" class="clearfix">
+    <li class="selected"><a href="/categorys.html" class="border_r">Game Category</a></li>
+    <li><a href="#" class="border_l">Essential softwares</a></li>
+</ul><!--navlist end-->
+<ul class="catelist wrap clearfix">
+    {% for cate in cates %}
+        <li class="nobor_t"><a href="/categorys/{{cate.id}}.html"><img src="/assets/images/icon/icong{{ cate.id }}.png" alt="{{cate.name}}" title="{{cate.name}}" width="60" height="60"/>{{cate.name}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

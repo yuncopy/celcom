@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>后台内容管理 | Celcom</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Admin panel developed with the Bootstrap from Twitter.">
+        <meta name="author" content="travis">
+
+        <link href="/assets/package/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/assets/css/site.css" rel="stylesheet">
+        <link href="/assets/package/bootstrap/bootstrap-responsive.min.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+          <script src="/assets/js/html5shiv.min.js"></script>
+        <![endif]-->
+        <script src="/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="/assets/package/bootstrap/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="/file/index.html">Celcom内容管理</a>
+                    <div class="btn-group pull-right">
+                        <a class="btn" href="/file/profile.html"><i class="icon-user"></i> {{ username}}</a>
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/file/profile.html">个人设置</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/login/logout.html">安全退出</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well sidebar-nav">
+                        <ul class="nav nav-list">
+                            <li class="nav-header"><i class="icon-wrench"></i> 游戏管理</li>
+                            <li ><a href="/file/list.html">游戏列表</a></li>  <!--class="active"-->
+                            <li><a href="/file/add.html">添加游戏</a></li>
+                            <li><a href="/file/image.html">图片管理</a></li>
+                            <li class="nav-header"><i class="icon-signal"></i>游戏分类</li>
+                            <li><a href="/file/cate.html">分类列表</a></li>
+                            <li><a href="/file/addcate.html">添加分类</a></li>
+                            <!--li><a href="visitor-stats.html">菜单管理</a></li-->
+                            <li class="nav-header"><i class="icon-user"></i>系统设置</li>
+                            <li><a href="/file/system.html">网站配置</a></li>
+                            <li><a href="/file/authority.html">权限管理</a></li>
+                            <li><a href="/file/sysuser.html">系统用户</a></li>
+                            <li><a href="/file/subdata.html">订阅数据</a></li> 
+                        </ul>
+                    </div>
+                </div>
+                
+                {% block content %}
+
+                {% endblock %}
+            </div>
+            <hr/>
+        </div>
+        
+    <!-- 删除 Modal -->
+    <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+                您确定要进行删除记录吗？
+          </div>
+          <div class="modal-footer">
+            <a  class="aDel btn btn-default">确定</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!--提示框-->
+    
+    <script>
+    $(document).ready(function () {
+        var url = window.location.href;
+        var pos = url.indexOf('/',7);  // http:// 开始查找
+        var name = url.substring(pos);
+
+        $('.nav').find('a').each(function(){
+            var href = $(this).attr('href');
+            if(name == href){
+                $(this).parent('li').attr('class','active');  // 选中状态
+            }
+        });
+    });
+    var myModal  = function(message,time = 3,callback){
+        var modal = '';
+        modal +='<div  class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">';
+            modal +='<div  class="modal-dialog"  role="document">';
+                modal +='<div class="modal-content">';
+                  modal +='<div class="modal-header">';
+                   modal +='<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    modal +='<h4 class="modal-title" id="myModalLabel">操作提示</h4>';
+                  modal +='</div>';
+                  modal +='<div class="modal-body">'+message+'</div>';
+                  modal +='<div class="modal-footer">';
+                    modal +='<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
+                  modal +='</div>';
+                modal +='</div>';
+            modal +='</div>';
+        modal +='</div>';
+        $('body').after(modal);
+        $('#myModal').modal({backdrop: 'static', keyboard: false});
+        if(typeof callback === 'function'){
+            setTimeout(function () {
+                callback();
+            },time*1000);
+        }
+    };
+    </script>
+    </body>
+</html>

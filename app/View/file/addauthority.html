@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="span9">
+    <div class="row-fluid">
+        <div class="page-header">
+            <h1>{% if authone.name|length > 0 %} 编辑 {% else %} 添加 {% endif %} <small> 权限管理</small></h1>
+        </div>
+        <form class="form-horizontal" method="post" action="/file/addauthority.html">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="name">名称</label>
+                    <div class="controls">
+                        <input type="hidden" class="input-xlarge" name="id" id="id" value="{{ authone.id }}" />
+                        <input type="hidden" class="input-xlarge" name="abits" id="abits" value="{{ btis }}" />
+                        <input type="text" class="input-xlarge" id="name" name="name" value="{{ authone.name }}" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="uri">路由</label>
+                    <div class="controls">
+                        <select name="method" class="form-control" style="width:80px;">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="DELETE">DELETE</option>
+                            <option value="PUT">PUT</option>
+                        </select>
+                        <input type="text" name="route"  value="{{ authone.route }}"/>
+                    </div>
+              
+                </div>
+               <div class="control-group">
+                    <label class="control-label" for="pid">父类</label>
+                    <div class="controls">
+                        <select id="cate_id" name="pid" class="{{ authone.pid }}" data-option="{{ auths_option }}">
+                           <option value='0'>顶级</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="active">启用</label>
+                    <div class="controls">
+                        <input type="checkbox" name="active" id="active" value="1" checked />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-success btn-large" value="保存" /> <a class="btn" href="/file/authority.html">返回</a>
+                </div>					
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script>
+    $(function(){
+        $('#cate_id').html(function(){
+            return $(this).html()+$(this).attr('data-option');
+        });
+        var cate_id = $('#cate_id').attr('class');
+        $('#cate_id > option').each(function(){
+            var vals = $(this).val();
+            if(vals == cate_id){
+                $(this).attr('selected','selected');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="span9">
+    <div class="row-fluid">
+        <div class="page-header">
+            <h1>列表<small> 分类管理</small></h1>
+        </div>
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if cate|length > 0 %}
+                    {% for row in cate %}
+                        <tr class="list-roles">
+                            <td>{{ row.id|e }}</td>
+                            <td>{{ row.name|e }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/file/addcate/{{ row.id|e }}.html"><i class="icon-pencil"></i> Edit</a></li>
+                                        <li><a data="/file/delcate/{{ row.id|e }}.html" class="delcate"  data-toggle="modal" data-target="#delModal" ><i class="icon-trash"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        <a href="/file/addcate.html" class="btn btn-success">添加分类</a>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $(document).on('click','.delcate',function(event){
+            var $target = $(event.target);
+            var data = $target.attr('data');
+            console.log(data);
+            $('#delModal').find('.aDel').attr('href',data);
+        });
+    });
+</script>
+{% endblock %}

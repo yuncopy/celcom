@@ -1,0 +1,220 @@
+
+<!--提示密码-->
+<div class="modal fade" id="msisdnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >Welcome to log in</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="remindPassForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Password</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="staticpass"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label"></label>
+                        <div class="col-sm-11">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="remind" value="1">Don't show again
+                                </label>
+                            </div>
+                           <p class="text-danger"> (Please keep your login password)</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-8 col-sm-4">
+                            <button id="remindPass" type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">Confirm</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--订阅模板-->
+<!-- Modal -->
+<div class="modal fade" id="subModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >Welcome to use BallonTech</h4>
+            </div>
+            <div class="modal-body">
+                Subscription content is provided by BallonTech, 1.5RM per week / 30RM per month
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" href="/celcom/{{ subURL }}" role="button" target="_blank">Using Celcom subscriptions</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="unsubModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >Welcome to use BallonTech </h4>
+                
+            </div>
+            
+            <div class="modal-body">
+                Are you sure you want to cancel?
+            </div>
+            <div class="modal-footer">
+                <p id="unsublabelSpan" class="text-warning col-sm-8"><strong>Warning!</strong></p>
+                <button id='modalUnsub' type="button" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--登录使用--->
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >Welcome to log in</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" onsubmit="return false;" id="loginForm">
+                    <div id="labelSpan" class="col-sm-10 alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                        <strong></strong>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPhone" class="col-sm-2 control-label">Phone</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div class="input-group-addon">+60</div>
+                                <input type="text" class="form-control" name="msisdn" id="inputPhone" placeholder="phone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="pwd" class="form-control" id="inputPassword" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="login" checked="checked" value="1"> Login free
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="btnLogin"  type="button" class="btn btn-default">Login</button>
+                            <a id="getPass" class="btn btn-link"   role="button">Get password</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function ($) {
+        var remind_key = 'remind';  // 不再提醒密码
+        $('#labelSpan').hide();
+        $('#btnLogin').click(function () {
+            var _modal = $('#loginForm');
+            var labelSpan = $('#labelSpan');
+            var config = _modal.serialize();
+            $.post("/celcom/login.html", config, function (e) {
+                if (e.status == 200) {
+                    labelSpan.attr('class', 'alert alert-success alert-dismissible');
+                    labelSpan.find('strong').html('Login success');
+                    var t1 = window.setTimeout(function () {
+                        $('#loginModal').modal('hide');
+                        localStorage.removeItem(remind_key);
+                        window.location.href = '/';
+                    }, 3000);
+                } else {
+                    labelSpan.attr('class', 'alert alert-danger alert-dismissible');
+                    labelSpan.find('strong').html('Cell phone number or password error');
+                }
+                labelSpan.show();
+            }, 'json');
+        });
+
+        $('.close').click(function () {
+            $('#labelSpan').hide();
+        });
+        //获取密码
+        $('#getPass').click(function () {
+            var config = {"msisdn": $('#inputPhone').val()};
+            var labelSpan = $('#labelSpan');
+            $.post("/celcom/getpass.html", config, function (e) {
+                if (e.status == 200) {
+                    localStorage.removeItem(remind_key);
+                    var pass = e.short_code;
+                    $('#inputPassword').val(pass);
+                    labelSpan.attr('class', 'alert alert-success alert-dismissible');
+                    labelSpan.find('strong').html('To get the password successful, please login');
+                } else {
+                    labelSpan.attr('class', 'alert alert-danger alert-dismissible');
+                    labelSpan.find('strong').html('Cell phone is wrong or not subscribe');
+                }
+                labelSpan.show();
+            }, 'json');
+        });
+
+         //查询用户状态
+        $.post("/celcom/msisdn.html",function(data){
+            var remind = localStorage.getItem(remind_key); 
+            if(!remind){
+                $('#staticpass').html(data.short_code);
+                $('#msisdnModal').modal('show');
+            }
+        },"json");
+        
+        // 设置不再提示密码
+        $('#remindPass').click(function(){
+            var remind = $('input[name="remind"]:checked').val(); 
+            if(remind){
+                localStorage.setItem(remind_key,remind);  // 设置值
+            }
+        });
+        
+        // 退订操作
+        var unsubM = $('#unsublabelSpan');
+        unsubM.hide();
+        $('#unsub').click(function(){
+            $('#unsubModal').modal('show');
+            var spTransID = $(this).attr('data-unsub');
+            $('#modalUnsub').attr('spTransID',spTransID);
+        });
+        $('#modalUnsub').click(function(){
+            var spTransID = $(this).attr('spTransID');
+            $.post("/celcom/unsub.html",{"spTransID":spTransID},function(data){
+                unsubM.show();
+                unsubM.find('strong').html(data.message);
+                var t=setTimeout(function(){
+                    unsubM.hide();
+                },2000);
+            },"json");
+        });
+       
+      
+        
+    });
+
+</script>
+

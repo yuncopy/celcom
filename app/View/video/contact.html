@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block content %}
+<!---start-content---->
+<div class="main-content">
+    <div class="wrap">
+        <div class="left-sidebar">
+            <div class="sidebar-boxs">
+                <div class="clear"> </div>
+                <div class="type-videos">
+                    <h3>热门视频</h3>
+                    <ul>
+                       {% for trow in top %}
+                        <li><a href="/singlepage/{{ trow.id|e }}.html">{{ trow.title}}</a></li>
+                       {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-content">
+            <div class="right-content-heading">
+                <div class="right-content-heading-left">
+                    <h3>Latest Categories of videos</h3>
+                </div>
+                <div class="right-content-heading-right">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a class="facebook" href="#" target="_blank"> </a></li>
+                            <li><a class="twitter" href="#" target="_blank"></a></li>
+                            <li><a class="googleplus" href="#" target="_blank"></a></li>
+                            <li><a class="pinterest" href="#" target="_blank"></a></li>
+                            <li><a class="dribbble" href="#" target="_blank"></a></li>
+                            <li><a class="vimeo" href="#" target="_blank"></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="clear"> </div>
+            </div>
+            <div class="section group">				
+                <div class="col span_1_of_3">
+                    <div class="contact_info">
+                        <h3>Find Us Here</h3>
+                        <div class="map"> 
+                           介绍内容
+                        </div>
+                    </div>
+                    <div class="company_address">
+                        <h3>Company Information :</h3>
+                        <p>500 Lorem Ipsum Dolor Sit,</p>
+                        <p>22-56-2-9 Sit Amet, Lorem,</p>
+                        <p>USA</p>
+                        <p>Phone:(00) 222 666 444</p>
+                        <p>Fax: (000) 000 00 00 0</p>
+                        <p>Email: <span><a href="mailto:@example.com">info@mycompany.com</a></span></p>
+                        <p>Follow on: <span>Facebook</span>, <span>Twitter</span></p>
+                    </div>
+                </div>				
+                <div class="col span_2_of_3">
+                    <div class="contact-form">
+                        <h3>Contact Us</h3>
+                        <form>
+                            <div>
+                                <span><label>NAME</label></span>
+                                <span><input type="text" class="textbox"></span>
+                            </div>
+                            <div>
+                                <span><label>E-MAIL</label></span>
+                                <span><input type="text" class="textbox"></span>
+                            </div>
+                            <div>
+                                <span><label>MOBILE</label></span>
+                                <span><input type="text" class="textbox"></span>
+                            </div>
+                            <div>
+                                <span><label>SUBJECT</label></span>
+                                <span><textarea> </textarea></span>
+                            </div>
+                            <div>
+                                <span><input type="submit" value="Submit"></span>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>				
+            </div>
+        </div>
+        <div class="clear"> </div>
+    </div>
+</div>
+<div class="clear"> </div>
+<!---End-content---->
+{% endblock %}
+

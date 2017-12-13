@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{{ apps.title }}</title>
+        <meta name="keywords" content="{{ apps.keywords }}"/>
+        <meta name="description" content="{{ apps.description }}"/>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no;" name="viewport" />
+        <meta content="yes" name="apple-mobile-web-app-capable" /> 
+        <meta content="black" name="apple-mobile-web-app-status-bar-style" /> 
+        <meta content="telephone=no" name="format-detection" /> 
+        <link href="/assets/package/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"  media="all" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style_game.css"/>
+        <script src="/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="/assets/package/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/assets/js/fingerprint.js"></script>
+         <style>
+             #unsub{
+                 float: right;
+                 position: absolute;
+                 top:38px;right: 103px;
+             }
+        </style>
+    </head>
+   
+    <body>
+        <div id="head" class="clearfix">
+            <a href="/" class="logo"><img  style='padding-bottom:8px;' src="/assets/images/logo2.png" alt="{{ apps.title }}" title="{{ apps.title }}"  height="38"/></a>
+            <a href="/" class="product">{{ apps.title }}</a>
+            <!--a href="/" class="search"></a-->
+            {% if name |length > 0 %}
+             <a class="subscribe" href="/logout.html">
+                <button  type="button" class="btn btn-default" >
+                    <span class="glyphicon glyphicon-log-out"> </span> Logout
+                </button>
+            </a>
+            <a class="subscribe" >
+                <button id='username' type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-user "> </span> {{name}} <span class="caret"></span>
+                </button>
+                <a data-unsub='{{ spTransID }}' id='unsub' style='height: 36px;display: none;' class="btn btn-default" data-href="" role="button"> 
+                    <span class="glyphicon glyphicon-heart-empty"> </span>
+                    Unsubscribe
+                </a>
+            </a> 
+        
+            {% else %}
+            <a class="subscribe" data-toggle="modal" data-target="#loginModal" >
+                <button  type="button" class="btn btn-default" >
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"> </span> Login
+                </button>
+            </a>
+            <a  data-toggle="modal" data-target="#subModal" class="subscribe">
+                <button  type="button" class="btn btn-default" >
+                    <span  class="glyphicon glyphicon-bookmark" aria-hidden="true"> </span> Subscribe
+                </button>
+            </a>
+            {% endif %}
+            
+        </div><!--head end-->
+        <ul id="nav" class="clearfix">
+            <li ><a href="/">Home</a></li>  <!--class="selected"-->
+            <li><a href="/categorys.html">Category</a></li>
+            <li><a href="/top.html">Chart</a></li>
+            <li><a href="/album.html">Album</a></li>
+            <li><a href="/news.html">New</a></li>
+        </ul><!--nav end-->
+        {% block content %}
+
+        {% endblock %}
+        <div class="clearfix footer">
+            <a href="#" class="left">Feedback</a>
+            <a href="#" class="right totop">Back to Top</a>
+        </div>
+        <div class="banben">
+            <a href="index.html"  style="color:#6ea818">Mobile</a>
+            <a href="#">PC</a>
+            <a href="/login/login.html">CMS</a>
+        </div>
+        <div class="copyright">
+            <p>&copy Copyright MG Play</p>
+            <p>No. 110459033, Beijing ICP</p>
+        </div>
+        <div id="client_bg" class="fixed">
+            <a data-toggle="modal" data-target="#subModal" >Subscribe to MG immediately</a>
+            <span class="close_c" onclick="close_clent()">Close</span>
+        </div>
+        <script type="text/javascript">
+            function close_clent() {
+                document.getElementById("client_bg").style.display = "none";
+            }
+            $(function($) {
+                // 菜单选中状态
+                var url = window.location.href;
+                var pos = url.indexOf('/',7);  // http:// 开始查找
+                var name = url.substring(pos);
+                $('#nav').find('a').each(function(){
+                    var href = $(this).attr('href');
+                    if(name == href){
+                        $(this).parent('li').attr('class','selected');  // 选中状态
+                    }
+                });
+                
+                // 退订按钮
+                $("#username").click(function(){
+                    $("#unsub").toggle();
+                });
+            });
+        </script>
+        {{ include('subscribe.html') }}
+    </body>
+    
+</html> 
